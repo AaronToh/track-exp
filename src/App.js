@@ -1,6 +1,9 @@
 // App.js
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import ExpenseList from './ExpenseList/ExpenseList.js';
+import AddExpense from './AddExpense/AddExpense.js';
+import './App.css';
 
 function App() {
   // State to hold the list of expenses
@@ -11,13 +14,31 @@ function App() {
     // Add more sample expenses as needed
   ]);
 
+  const addExpenseHandler = (expense) => {
+    setExpenses((prevExpenses) => [expense, ...prevExpenses]);
+  };
+
   return (
-    <div>
-      <h1>Expense Tracker</h1>
-      {/* Render the ExpenseList component and pass expenses as a prop */}
-      <ExpenseList expenses={expenses} />
-      {/* Additional components like AddExpense can be added here */}
-    </div>
+    <Router>
+      <nav className="navbar">
+        <NavLink to="/" className="nav-link" activeClassName="active" exact>
+          Expense List
+        </NavLink>
+        <NavLink to="/add-expense" className="nav-link" activeClassName="active">
+          Add Expense
+        </NavLink>
+      </nav>
+      <Routes>
+        <Route
+          path="/"
+          element={<ExpenseList expenses={expenses} />}
+        />
+        <Route
+          path="/add-expense"
+          element={<AddExpense onAddExpense={addExpenseHandler} />}
+        />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,15 +1,17 @@
 // ExpenseList.js
 import React from 'react';
+import './ExpenseList.css';
 
 function ExpenseList({ expenses }) {
   return (
-    <div>
-      <h2>Expenses</h2>
+    <div className="expense-list">
+      <h2>Expense List</h2>
       <ul>
-        {/* Map over the expenses array and render each expense */}
         {expenses.map((expense) => (
-          <li key={expense.id}>
-            {expense.name} - ${expense.amount} on {expense.date}
+          <li key={expense.id} className="expense-item">
+            <span>{expense.name}</span>
+            <span>${expense.amount.toFixed(2)}</span>
+            <span>{expense.date}</span>
           </li>
         ))}
       </ul>
