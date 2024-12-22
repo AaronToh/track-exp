@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './AddExpense.css';
 import axios from 'axios';
 
-
-function AddExpense({ userId, onAddExpense }) {
+function AddExpense({ user, onAddExpense }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
@@ -12,8 +11,10 @@ function AddExpense({ userId, onAddExpense }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const { id: userId } = user;
+
     try {
-      console.log('userId:', userId);
       const response = await axios.post('http://localhost:3001/addExpense', {
         userId,
         name,

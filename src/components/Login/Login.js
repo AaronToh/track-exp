@@ -24,7 +24,7 @@ function Login({ onLogin }) {
         // Check the response from the server
         if (response.data.success) {
             // If the login is successful, call the onLogin function and navigate to the home page
-            onLogin(response.data.userId);
+            onLogin({ id: response.data.userId, username: response.data.username });
             navigate('/');
         } else {
             setError('Invalid username or password');

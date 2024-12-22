@@ -17,6 +17,23 @@ let db = new sqlite3.Database('track-exp.db' , (err)=> {
     console.log('Connected to the SQLite database.');
   });
 
+app.post('/validatePassword', (req, res, next) => {
+  const { username, password } = req.body;
+
+  db.get('SELECT * FROM users WHERE username = ?', [username], async (err, row) => {
+      if (err) {
+          return console.error(err.message);
+      }
+      if (!row) {
+          res.status(401).send({ error: 'Invalid username' });
+      } else if (row.password === password) {
+          res.json({ success: true , userId: row.id , username: row.username });
+      } else {
+          res.status(401).send({ error: 'Invalid password' });
+      }
+  })
+})
+
 app.post('/addExpense', (req, res) => {
     const { userId, name, amount, date } = req.body;
     const sql = 'INSERT INTO expenses (user_id, name, amount, date) VALUES (?, ?, ?, ?)';
@@ -38,23 +55,5 @@ app.get('/getExpenses/:userId', (req, res) => {
       res.json({ expenses: rows });
     });
   });
-
-app.post('/validatePassword', (req, res, next) => {
-    const { username, password } = req.body;
-
-
-    db.get(`SELECT * FROM users WHERE username = '${username}'` , (err, row) => {
-        if (err) {
-            return console.error(err.message);
-        }
-        if (!row) {
-            res.status(401).send({ error: 'Invalid username' });
-        } else if (row.password === password) {
-            res.json({ success: true });
-        } else {
-            res.status(401).send({ error: 'Invalid password' });
-        }
-    })
-})
 
 app.listen(3001, () => console.log('listening on port 3001'))
